@@ -1,0 +1,84 @@
+--- libstk/test/test_app.cpp.orig	2004-05-07 21:53:52.000000000 +0200
++++ libstk/test/test_app.cpp	2004-05-08 16:23:37.546933072 +0200
+@@ -41,7 +41,9 @@
+ void help(const std::string& progname, int exitval);
+ int parse_args(int argc, char *argv[]);
+ 
++#ifdef HAVE_LOGGING
+ log_level main_log_level = LL_Info;
++#endif
+ 
+ bool scroll_slot(scroll_model::ptr target, int increment)
+ {
+@@ -261,6 +263,7 @@
+                 break;
+ 
+             case 'l':
++#ifdef HAVE_LOGGING
+                 if (strcmp("none", optarg) == 0) main_log_level = stk::LL_None;
+                 else if (strcmp("error", optarg) == 0) main_log_level = stk::LL_Error;
+                 else if (strcmp("warning", optarg) == 0) main_log_level = stk::LL_Warning;
+@@ -270,6 +273,10 @@
+                     std::cout << "invalid log level " << optarg << std::endl;
+                     help(progname, 2);
+                 }
++#else
++		std::cout << "libstk was built without logging support" << std::endl;
++		exit(1);
++#endif
+                 break;
+ 
+             default:
+--- libstk/test/Makefile.am.orig	2003-10-31 22:27:13.000000000 +0100
++++ libstk/test/Makefile.am	2004-05-08 16:30:51.760922512 +0200
+@@ -44,11 +44,11 @@
+ test_area_SOURCES         = test_area.cpp 
+ printing_test_SOURCES	  = printing_test.cpp
+ 
+-hello_world_LDADD       = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la
+-test_app_LDADD          = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la
+-hydra_LDADD             = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la
+-xine_test_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la 
++hello_world_LDADD       = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_31 -lboost_thread-gcc-mt-1_31 $(top_srcdir)/libstk/libstk.la
++test_app_LDADD          = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_31 -lboost_thread-gcc-mt-1_31 $(top_srcdir)/libstk/libstk.la
++hydra_LDADD             = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_31 -lboost_thread-gcc-mt-1_31 $(top_srcdir)/libstk/libstk.la
++xine_test_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_31 -lboost_thread-gcc-mt-1_31 $(top_srcdir)/libstk/libstk.la 
+ xine_test_LDFLAGS       = `xine-config --libs`
+ timer_test_LDADD        = $(top_srcdir)/libstk/libstk.la
+-test_area_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS)  $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la
+-printing_test_LDADD     = -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la -lijs 
++test_area_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS)  $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_31 -lboost_thread-gcc-mt-1_31 $(top_srcdir)/libstk/libstk.la
++printing_test_LDADD     = -lboost_signals-gcc-mt-1_31 -lboost_thread-gcc-mt-1_31 $(top_srcdir)/libstk/libstk.la -lijs 
+--- libstk/test/timer_test.cpp.orig	2003-08-23 18:36:12.000000000 +0200
++++ libstk/test/timer_test.cpp	2004-05-08 16:33:06.228480336 +0200
+@@ -8,7 +8,9 @@
+ 
+ int main()
+ {
++#ifdef HAVE_LOGGING
+     logger::get()->add_target(&std::cout, LL_Info);
++#endif
+     std::cout << "Libstk timer test, please wait 2 seconds" << std::endl;
+ 
+     time_value a = get_current_time_value();
+--- libstk/libstk.pc.in.orig	2004-05-08 16:34:01.851024424 +0200
++++ libstk/libstk.pc.in	2004-05-08 00:35:46.000000000 +0200
+@@ -7,6 +7,6 @@
+ Description: The Settop box Toolkit
+ Requires:
+ Version: @VERSION@
+-Libs: -L${libdir} -lstk -lboost_signals -lfreetype
++Libs: -L${libdir} -lstk -lboost_signals-gcc-mt-1_31 -lfreetype
+ Cflags: -I${includedir}/libstk-@VERSION@  -I/usr/include/freetype2
+ 
+--- libstk/configure.in.orig	2004-05-07 21:53:51.000000000 +0200
++++ libstk/configure.in	2004-05-08 16:34:48.201978008 +0200
+@@ -191,7 +191,7 @@
+ 
+ AM_CONFIG_HEADER(libstk/config.h)
+ 
+-CXXFLAGS="$CXXFLAGS -Wall -W -Wno-switch -pedantic -O3 -pthread"
++CXXFLAGS="$CXXFLAGS -Wall -W -Wno-switch -pedantic -pthread"
+ 
+ AC_OUTPUT([
+ Makefile
