@@ -63,7 +63,6 @@ Requires:	boost-thread-devel >= 1.31.0
 Requires:	freetype-devel
 Requires:	libjpeg-devel
 Requires:	libpng-devel
-%{?with_xine:Requires:	xine-lib-devel}
 
 %description devel
 Header files for LibSTK library.
