@@ -21,7 +21,7 @@ URL:		http://www.libstk.org/
 BuildRequires:	DirectFB-devel
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	autoconf >= 2.54
-BuildRequires:	automake >= 1.7
+BuildRequires:	automake >= 1:1.7
 BuildRequires:	boost-bind-devel >= 1.32.0
 BuildRequires:	boost-conversion-devel >= 1.32.0
 BuildRequires:	boost-devel >= 1.32.0
