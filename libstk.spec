@@ -22,12 +22,12 @@ BuildRequires:	DirectFB-devel
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake >= 1.7
-BuildRequires:	boost-bind-devel >= 1.31.0
-BuildRequires:	boost-conversion-devel >= 1.31.0
-BuildRequires:	boost-devel >= 1.31.0
-BuildRequires:	boost-signals-devel >= 1.31.0
-BuildRequires:	boost-thread-devel >= 1.31.0
-BuildRequires:	freetype-devel
+BuildRequires:	boost-bind-devel >= 1.32.0
+BuildRequires:	boost-conversion-devel >= 1.32.0
+BuildRequires:	boost-devel >= 1.32.0
+BuildRequires:	boost-signals-devel >= 1.32.0
+BuildRequires:	boost-thread-devel >= 1.32.0
+BuildRequires:	freetype-devel >= 2.0
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtool >= 2:1.5
@@ -57,11 +57,11 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 BuildRequires:	DirectFB-devel
 Requires:	SDL-devel >= 1.2.0
-Requires:	boost-bind-devel >= 1.31.0
-Requires:	boost-devel >= 1.31.0
-Requires:	boost-signals-devel >= 1.31.0
-Requires:	boost-thread-devel >= 1.31.0
-Requires:	freetype-devel
+Requires:	boost-bind-devel >= 1.32.0
+Requires:	boost-devel >= 1.32.0
+Requires:	boost-signals-devel >= 1.32.0
+Requires:	boost-thread-devel >= 1.32.0
+Requires:	freetype-devel >= 2.0
 Requires:	libjpeg-devel
 Requires:	libpng-devel
 
