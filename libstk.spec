@@ -32,6 +32,7 @@ BuildRequires:	libpng-devel
 BuildRequires:	libtool >= 2:1.5
 BuildRequires:	pkgconfig
 %{?with_xine:BuildRequires:	xine-lib-devel}
+%{?with_xine:Provides:	%{name}(xine) = %{version}-%{release}}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
