@@ -39,16 +39,16 @@
 -test_app_LDADD          = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la
 -hydra_LDADD             = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la
 -xine_test_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la 
-+hello_world_LDADD       = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_31 -lboost_thread-gcc-mt-1_31 $(top_srcdir)/libstk/libstk.la
-+test_app_LDADD          = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_31 -lboost_thread-gcc-mt-1_31 $(top_srcdir)/libstk/libstk.la
-+hydra_LDADD             = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_31 -lboost_thread-gcc-mt-1_31 $(top_srcdir)/libstk/libstk.la
-+xine_test_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_31 -lboost_thread-gcc-mt-1_31 $(top_srcdir)/libstk/libstk.la 
++hello_world_LDADD       = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_32 -lboost_thread-gcc-mt-1_32 $(top_srcdir)/libstk/libstk.la
++test_app_LDADD          = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_32 -lboost_thread-gcc-mt-1_32 $(top_srcdir)/libstk/libstk.la
++hydra_LDADD             = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_32 -lboost_thread-gcc-mt-1_32 $(top_srcdir)/libstk/libstk.la
++xine_test_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_32 -lboost_thread-gcc-mt-1_32 $(top_srcdir)/libstk/libstk.la 
  xine_test_LDFLAGS       = `xine-config --libs`
  timer_test_LDADD        = $(top_srcdir)/libstk/libstk.la
 -test_area_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS)  $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la
 -printing_test_LDADD     = -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la -lijs 
-+test_area_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS)  $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_31 -lboost_thread-gcc-mt-1_31 $(top_srcdir)/libstk/libstk.la
-+printing_test_LDADD     = -lboost_signals-gcc-mt-1_31 -lboost_thread-gcc-mt-1_31 $(top_srcdir)/libstk/libstk.la -lijs 
++test_area_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS)  $(LIBJPEB_LIBS) -lboost_signals-gcc-mt-1_32 -lboost_thread-gcc-mt-1_32 $(top_srcdir)/libstk/libstk.la
++printing_test_LDADD     = -lboost_signals-gcc-mt-1_32 -lboost_thread-gcc-mt-1_32 $(top_srcdir)/libstk/libstk.la -lijs 
 --- libstk/test/timer_test.cpp.orig	2003-08-23 18:36:12.000000000 +0200
 +++ libstk/test/timer_test.cpp	2004-05-08 16:33:06.228480336 +0200
 @@ -8,7 +8,9 @@
