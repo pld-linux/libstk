@@ -16,6 +16,7 @@ Group:		Libraries
 Source0:	%{name}-%{snap}.tar.bz2
 # Source0-md5:	fbcab2be93acd3d66b9e7961fd92bec9
 Patch0:		%{name}-fixes.patch
+Patch1:		%{name}-gcc34.patch
 URL:		http://www.libstk.org/
 BuildRequires:	DirectFB-devel
 BuildRequires:	SDL-devel >= 1.2.0
@@ -85,6 +86,7 @@ Statyczna biblioteka LibSTK.
 %prep
 %setup -q -n %{name}
 %patch0 -p1
+%patch1 -p1
 
 find . -type d -name CVS | xargs rm -rf
 
