@@ -2,14 +2,14 @@
 # TODO: global fonts installation
 #
 # Conditional build:
-%bcond_without	xine	# build without xine support
+%bcond_with	xine	# build without xine support
 #
 Summary:	LibSTK - graphical widget set written in C++
 Summary(pl):	LibSTK - zbiór graficznych widgetów napisany w C++
 Name:		libstk
 Version:	0.2.0
 %define	snap	20040507
-Release:	0.%{snap}.1
+Release:	0.%{snap}.2
 License:	Libstk Library License (relaxed LGPL)
 Group:		Libraries
 # cvs -d :pserver:anonymous:anonymous@libstk.org:/home/dvhart/cvs/pub co libstk
