@@ -2,8 +2,7 @@
 # TODO: global fonts installation
 #
 # Conditional build:
-%bcond_with	xine	# build with xine support
-#			  (broken at the moment, xine headers are not C++-aware)
+%bcond_without	xine	# build without xine support
 #
 Summary:	LibSTK - graphical widget set written in C++
 Summary(pl):	LibSTK - zbiór graficznych widgetów napisany w C++
@@ -95,6 +94,8 @@ find . -type d -name CVS | xargs rm -rf
 %{__autoconf}
 %{__autoheader}
 %{__automake}
+# workaround for xine headers
+CPPFLAGS="-DHAVE_BASENAME"
 %configure \
 	--enable-directfb \
 	--enable-fbdev \
