@@ -68,7 +68,7 @@
  Requires:
  Version: @VERSION@
 -Libs: -L${libdir} -lstk -lboost_signals -lfreetype
-+Libs: -L${libdir} -lstk -lboost_signals-gcc-mt-1_31 -lfreetype
++Libs: -L${libdir} -lstk -lboost_signals-gcc-mt-1_32 -lfreetype
  Cflags: -I${includedir}/libstk-@VERSION@  -I/usr/include/freetype2
  
 --- libstk/configure.in.orig	2004-05-07 21:53:51.000000000 +0200
