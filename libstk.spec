@@ -1,27 +1,37 @@
+#
 # TODO: global fonts installation
+#
+# Conditional build:
+%bcond_with	xine	# build with xine support
+#			  (broken at the moment, xine headers are not C++-aware)
+#
 Summary:	LibSTK - graphical widget set written in C++
 Summary(pl):	LibSTK - zbiór graficznych widgetów napisany w C++
 Name:		libstk
 Version:	0.2.0
-%define	snap	20040208
+%define	snap	20040507
 Release:	0.%{snap}.1
 License:	Libstk Library License (relaxed LGPL)
 Group:		Libraries
 # cvs -d :pserver:anonymous:anonymous@libstk.org:/home/dvhart/cvs/pub co libstk
 Source0:	%{name}-%{snap}.tar.bz2
-# Source0-md5:	48c7788c2422beba5b8db0c22ad854f1
+# Source0-md5:	fbcab2be93acd3d66b9e7961fd92bec9
+Patch0:		%{name}-fixes.patch
 URL:		http://www.libstk.org/
 BuildRequires:	DirectFB-devel
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake >= 1.7
-BuildRequires:	boost-devel >= 1.30.0
+BuildRequires:	boost-bind-devel >= 1.31.0
+BuildRequires:	boost-conversion-devel >= 1.31.0
+BuildRequires:	boost-signals-devel >= 1.31.0
+BuildRequires:	boost-thread-devel >= 1.31.0
 BuildRequires:	freetype-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtool >= 2:1.5
 BuildRequires:	pkgconfig
-#BuildRequires:	xine-lib-devel
+%{?with_xine:BuildRequires:	xine-lib-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -43,6 +53,15 @@ Summary:	Header files for LibSTK library
 Summary(pl):	Pliki nag³ówkowe biblioteki LibSTK
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+BuildRequires:	DirectFB-devel
+Requires:	SDL-devel >= 1.2.0
+Requires:	boost-bind-devel >= 1.31.0
+Requires:	boost-signals-devel >= 1.31.0
+Requires:	boost-thread-devel >= 1.31.0
+Requires:	freetype-devel
+Requires:	libjpeg-devel
+Requires:	libpng-devel
+%{?with_xine:Requires:	xine-lib-devel}
 
 %description devel
 Header files for LibSTK library.
@@ -64,6 +83,7 @@ Statyczna biblioteka LibSTK.
 
 %prep
 %setup -q -n %{name}
+%patch0 -p1
 
 find . -type d -name CVS | xargs rm -rf
 
@@ -76,11 +96,10 @@ find . -type d -name CVS | xargs rm -rf
 %configure \
 	--enable-directfb \
 	--enable-fbdev \
-	--enable-sdl
-#	--enable-xine - doesn't build (xine headers cause C++ errors)
+	--enable-sdl \
+	%{?with_xine:--enable-xine}
 
-%{__make} \
-	CXXFLAGS="%{rpmcflags} -Wall -W -Wno-switch -pedantic"
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
