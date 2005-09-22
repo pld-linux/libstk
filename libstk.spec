@@ -2,14 +2,15 @@
 # TODO: global fonts installation
 #
 # Conditional build:
-%bcond_without	xine	# build without xine support
+%bcond_without	static_libs 	# build without static libraries
+%bcond_without	xine		# build without xine support
 #
 Summary:	LibSTK - graphical widget set written in C++
 Summary(pl):	LibSTK - zbiór graficznych widgetów napisany w C++
 Name:		libstk
 Version:	0.2.0
 %define	snap	20040507
-Release:	0.%{snap}.6
+Release:	0.%{snap}.7
 License:	Libstk Library License (relaxed LGPL)
 Group:		Libraries
 # cvs -d :pserver:anonymous:anonymous@libstk.org:/home/dvhart/cvs/pub co libstk
@@ -103,6 +104,7 @@ CPPFLAGS="-DHAVE_BASENAME"
 	--enable-directfb \
 	--enable-fbdev \
 	--enable-sdl \
+	%{!?with_static_libs:--enable-static=no} \
 	%{?with_xine:--enable-xine}
 
 %{__make}
@@ -135,6 +137,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/libstk-*
 %{_pkgconfigdir}/*.pc
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
+%endif
