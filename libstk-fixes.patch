@@ -44,17 +44,6 @@
  
 --- libstk/configure.in~	2005-09-21 15:11:14.578522856 +0200
 +++ libstk/configure.in	2005-09-21 15:12:27.406451328 +0200
-@@ -24,8 +24,8 @@
- dnl FIXME make this use AC_CHECK_HEADERS and update the event_system/producers accordingly
- dnl AC_CHECK_HEADER(boost/thread/mutex.hpp, , [AC_MSG_ERROR( *** boost/thread/mutex.hpp not found - build will fail)])
- 
--AC_CHECK_LIB(boost_signals-gcc-mt-1_31, main, , [AC_MSG_ERROR( *** boost_signals library not found - build will fail)])
--AC_CHECK_LIB(boost_thread-gcc-mt-1_31, main, , [AC_MSG_ERROR( *** boost_thread library not found - build will fail)])
-+AC_CHECK_LIB(boost_signals, main, , [AC_MSG_ERROR( *** boost_signals library not found - build will fail)])
-+AC_CHECK_LIB(boost_thread, main, , [AC_MSG_ERROR( *** boost_thread library not found - build will fail)])
- AC_LANG_RESTORE
- 
- 
 @@ -191,7 +191,7 @@
  
  AM_CONFIG_HEADER(libstk/config.h)
