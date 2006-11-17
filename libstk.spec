@@ -13,11 +13,11 @@ Version:	0.2.0
 Release:	0.%{_snap}.1
 License:	Libstk Library License (relaxed LGPL)
 Group:		Libraries
-#Source0:	http://www.libstk.net/sites/www.libstk.org/files/%{name}-%{_snap}.tar.gz
+#Source0:	http://www.libstk.net/sites/www.libstk.net/files/%{name}-%{_snap}.tar.gz
 Source0:	%{name}-%{_snap}.tar.bz2
 # Source0-md5:	350c5e47de8a54d19372bcf6ca926540
 Patch0:		%{name}-fixes.patch
-URL:		http://www.libstk.net
+URL:		http://www.libstk.net/
 BuildRequires:	DirectFB-devel
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	autoconf >= 2.54
