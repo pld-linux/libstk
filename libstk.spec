@@ -6,7 +6,7 @@
 %bcond_without	xine		# build without xine support
 #
 Summary:	LibSTK - graphical widget set written in C++
-Summary(pl):	LibSTK - zbiór graficznych widgetów napisany w C++
+Summary(pl.UTF-8):   LibSTK - zbiÃ³r graficznych widgetÃ³w napisany w C++
 Name:		libstk
 Version:	0.2.0
 %define		_snap	20061117
@@ -43,16 +43,16 @@ vehicular media systems. LibSTK abstracts the graphic and event
 systems, allowing it to be used on any platform with a C++-compliant
 compiler.
 
-%description -l pl
-LibSTK to zestaw widgetów graficznych zaprojektowany aby sprostaæ
-dzisiejszym potrzebom pojawiaj±cej siê klasy platform z osadzonymi
-mediami. LibSTK tworzy abstrakcjê systemów grafiki i zdarzeñ,
-pozwalaj±c na u¿ywanie ich na ka¿dej platformie z kompilatorem zgodnym
+%description -l pl.UTF-8
+LibSTK to zestaw widgetÃ³w graficznych zaprojektowany aby sprostaÄ‡
+dzisiejszym potrzebom pojawiajÄ…cej siÄ™ klasy platform z osadzonymi
+mediami. LibSTK tworzy abstrakcjÄ™ systemÃ³w grafiki i zdarzeÅ„,
+pozwalajÄ…c na uÅ¼ywanie ich na kaÅ¼dej platformie z kompilatorem zgodnym
 z C++.
 
 %package devel
 Summary:	Header files for LibSTK library
-Summary(pl):	Pliki nag³ówkowe biblioteki LibSTK
+Summary(pl.UTF-8):   Pliki nagÅ‚Ã³wkowe biblioteki LibSTK
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 BuildRequires:	DirectFB-devel
@@ -69,19 +69,19 @@ Requires:	libpng-devel
 %description devel
 Header files for LibSTK library.
 
-%description devel -l pl
-Pliki nag³ówkowe biblioteki LibSTK.
+%description devel -l pl.UTF-8
+Pliki nagÅ‚Ã³wkowe biblioteki LibSTK.
 
 %package static
 Summary:	Static LibSTK library
-Summary(pl):	Statyczna biblioteka LibSTK
+Summary(pl.UTF-8):   Statyczna biblioteka LibSTK
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static LibSTK library.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczna biblioteka LibSTK.
 
 %prep
