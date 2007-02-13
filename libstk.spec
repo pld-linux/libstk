@@ -6,7 +6,7 @@
 %bcond_without	xine		# build without xine support
 #
 Summary:	LibSTK - graphical widget set written in C++
-Summary(pl.UTF-8):   LibSTK - zbiór graficznych widgetów napisany w C++
+Summary(pl.UTF-8):	LibSTK - zbiór graficznych widgetów napisany w C++
 Name:		libstk
 Version:	0.2.0
 %define		_snap	20061117
@@ -52,7 +52,7 @@ z C++.
 
 %package devel
 Summary:	Header files for LibSTK library
-Summary(pl.UTF-8):   Pliki nagłówkowe biblioteki LibSTK
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki LibSTK
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 BuildRequires:	DirectFB-devel
@@ -74,7 +74,7 @@ Pliki nagłówkowe biblioteki LibSTK.
 
 %package static
 Summary:	Static LibSTK library
-Summary(pl.UTF-8):   Statyczna biblioteka LibSTK
+Summary(pl.UTF-8):	Statyczna biblioteka LibSTK
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
