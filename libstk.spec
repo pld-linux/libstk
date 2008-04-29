@@ -22,11 +22,7 @@ BuildRequires:	DirectFB-devel
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake >= 1:1.7
-BuildRequires:	boost-bind-devel >= 1.32.0
-BuildRequires:	boost-conversion-devel >= 1.32.0
-BuildRequires:	boost-devel >= 1.32.0
-BuildRequires:	boost-signals-devel >= 1.32.0
-BuildRequires:	boost-thread-devel >= 1.32.0
+BuildRequires:	boost-devel >= 1.35.0
 BuildRequires:	freetype-devel >= 2.0
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
