@@ -115,19 +115,20 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog README TODO license.txt
-%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
+%attr(755,root,root) %{_libdir}/libstk.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libstk.so.0
 %{_datadir}/%{name}
 
 %files devel
 %defattr(644,root,root,755)
 %doc doc/*
-%attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/lib*.la
+%attr(755,root,root) %{_libdir}/libstk.so
+%{_libdir}/libstk.la
 %{_includedir}/libstk-*
-%{_pkgconfigdir}/*.pc
+%{_pkgconfigdir}/libstk.pc
 
 %if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/libstk.a
 %endif
