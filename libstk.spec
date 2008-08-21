@@ -9,12 +9,12 @@ Summary:	LibSTK - graphical widget set written in C++
 Summary(pl.UTF-8):	LibSTK - zbiór graficznych widgetów napisany w C++
 Name:		libstk
 Version:	0.2.0
-%define		_snap	20061117
-Release:	0.%{_snap}.11
+%define		snap	20061117
+Release:	0.%{snap}.12
 License:	Libstk Library License (relaxed LGPL)
 Group:		Libraries
-#Source0:	http://www.libstk.net/sites/www.libstk.net/files/%{name}-%{_snap}.tar.gz
-Source0:	%{name}-%{_snap}.tar.bz2
+#Source0:	http://www.libstk.net/sites/www.libstk.net/files/%{name}-%{snap}.tar.gz
+Source0:	%{name}-%{snap}.tar.bz2
 # Source0-md5:	350c5e47de8a54d19372bcf6ca926540
 Patch0:		%{name}-fixes.patch
 URL:		http://www.libstk.net/
@@ -78,7 +78,7 @@ Static LibSTK library.
 Statyczna biblioteka LibSTK.
 
 %prep
-%setup -q -n %{name}-%{_snap}
+%setup -q -n %{name}-%{snap}
 %patch0 -p1
 
 %build
