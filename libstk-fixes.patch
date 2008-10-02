@@ -49,7 +49,7 @@
  AM_CONFIG_HEADER(libstk/config.h)
  
 -CXXFLAGS="$CXXFLAGS -Wall -W -Wno-switch -pedantic -O3 -pthread"
-+CXXFLAGS="$CXXFLAGS -Wall -W -Wno-switch -pedantic -pthread"
++CXXFLAGS="$CXXFLAGS -Wall -W -Wno-switch -pthread"
  
  AC_OUTPUT([
  Makefile
@@ -64,3 +64,14 @@ diff -urN libstk-20061117.org/libstk/read_dir.h libstk-20061117/libstk/read_dir.
  #include <boost/shared_ptr.hpp>
  #include <vector>
  #include <string>
+--- libstk/libstk/overlay_dfb.h~	2008-10-02 08:38:53.983979076 +0200
++++ libstk/libstk/overlay_dfb.h	2008-10-02 08:39:14.560643428 +0200
+@@ -118,7 +118,7 @@
+         {
+             INFO("destructor")
+             if (locked_) unlock();
+-            DFBCHECK(surface_->Release(surface_));
++            DFBCHECK((DFBResult)surface_->Release(surface_));
+             surface_ = NULL;
+         }
+ 
