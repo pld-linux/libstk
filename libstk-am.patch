@@ -1,0 +1,11 @@
+--- libstk-20061117/libstk/Makefile.am.orig	2006-11-17 11:27:13.000000000 +0100
++++ libstk-20061117/libstk/Makefile.am	2009-06-21 14:34:39.257863309 +0200
+@@ -122,7 +122,7 @@
+ 	color_manager.h     timer.h             surface_impl.h time_value.h \
+ 	posix_time.h        viewport.h          hotkey.h            overlay.h \
+ 	overlay_sdl.h       overlay_dfb.h       stk_types.h         scroll_bar.h \
+-	event_producer.h    event_producer_elotouch.h               stk_c_wrapper.h \
++	event_producer.h    event_producer_elotouch.h \
+ 	switched_panel.h edit_box.h             text_area.h read_dir.h\
+ 	numeric_spinner.h config.h              $(headers_sdl) $(headers_dfb) \
+ 	$(headers_fbdev)    $(headers_logging)  $(headers_xine)     $(headers_printing) \
