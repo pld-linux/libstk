@@ -10,13 +10,14 @@ Summary(pl.UTF-8):	LibSTK - zbiór graficznych widgetów napisany w C++
 Name:		libstk
 Version:	0.2.0
 %define		snap	20061117
-Release:	0.%{snap}.21
+Release:	0.%{snap}.22
 License:	Libstk Library License (relaxed LGPL)
 Group:		Libraries
 #Source0:	http://www.libstk.net/sites/www.libstk.net/files/%{name}-%{snap}.tar.gz
 Source0:	%{name}-%{snap}.tar.bz2
 # Source0-md5:	350c5e47de8a54d19372bcf6ca926540
 Patch0:		%{name}-fixes.patch
+Patch1:		%{name}-am.patch
 URL:		http://www.libstk.net/
 BuildRequires:	DirectFB-devel
 BuildRequires:	SDL-devel >= 1.2.0
@@ -80,6 +81,7 @@ Statyczna biblioteka LibSTK.
 %prep
 %setup -q -n %{name}-%{snap}
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__libtoolize}
