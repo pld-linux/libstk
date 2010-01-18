@@ -5,11 +5,11 @@
 %bcond_without	static_libs 	# build without static libraries
 %bcond_without	xine		# build without xine support
 #
+%define		snap	20061117
 Summary:	LibSTK - graphical widget set written in C++
 Summary(pl.UTF-8):	LibSTK - zbiór graficznych widgetów napisany w C++
 Name:		libstk
 Version:	0.2.0
-%define		snap	20061117
 Release:	0.%{snap}.24
 License:	Libstk Library License (relaxed LGPL)
 Group:		Libraries
@@ -30,6 +30,7 @@ BuildRequires:	libpng-devel
 BuildRequires:	libtool >= 2:1.5
 BuildRequires:	pkgconfig
 %{?with_xine:BuildRequires:	xine-lib-devel}
+Requires:	fonts-TTF-bitstream-vera
 %{?with_xine:Provides:	%{name}(xine) = %{version}-%{release}}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -51,8 +52,8 @@ z C++.
 Summary:	Header files for LibSTK library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki LibSTK
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
 BuildRequires:	DirectFB-devel
+Requires:	%{name} = %{version}-%{release}
 Requires:	SDL-devel >= 1.2.0
 Requires:	boost-devel >= 1.35.0
 Requires:	freetype-devel >= 2.0
@@ -106,7 +107,12 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-mv -f doc/license.txt .
+cd $RPM_BUILD_ROOT%{_datadir}/%{name}/fonts
+for FONT in Vera*.ttf; do
+	%{__rm} "$FONT"
+	ln -s %{_datadir}/fonts/TTF/"$FONT" "$FONT"
+done
+rm copyright
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -116,7 +122,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog README TODO license.txt
+%doc AUTHORS ChangeLog README TODO doc/license.txt
 %attr(755,root,root) %{_libdir}/libstk.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libstk.so.0
 %{_datadir}/%{name}
