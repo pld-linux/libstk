@@ -1,6 +1,12 @@
 #
 # TODO: global fonts installation
 #
+# Workaround for xine-lib.spec - libstk.spec updating:
+#       1. make-request -r --without stk xine-lib
+#       2. make-request -r libstk
+#       3. bump release of xine-lib
+#       4. make-request -r xine-lib
+#
 # Conditional build:
 %bcond_without	static_libs 	# build without static libraries
 %bcond_without	xine		# build without xine support
