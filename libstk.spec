@@ -58,8 +58,8 @@ z C++.
 Summary:	Header files for LibSTK library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki LibSTK
 Group:		Development/Libraries
-BuildRequires:	DirectFB-devel
 Requires:	%{name} = %{version}-%{release}
+Requires:	DirectFB-devel
 Requires:	SDL-devel >= 1.2.0
 Requires:	boost-devel >= 1.35.0
 Requires:	freetype-devel >= 2.0
