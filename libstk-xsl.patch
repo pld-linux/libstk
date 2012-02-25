@@ -1,0 +1,9 @@
+--- dvhart-libstk-6186fff/doc/htmlchunkedsheet.xsl.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/doc/htmlchunkedsheet.xsl	2012-02-25 19:22:54.742674861 +0100
+@@ -1,5 +1,5 @@
+ <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                 version='1.0'>
+ 
+-  <xsl:import href="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl" />
++  <xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets/html/chunk.xsl" />
+ </xsl:stylesheet>

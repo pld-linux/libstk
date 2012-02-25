@@ -75,3 +75,13 @@ diff -urN libstk-20061117.org/libstk/read_dir.h libstk-20061117/libstk/read_dir.
              surface_ = NULL;
          }
  
+--- dvhart-libstk-6186fff/libstk/surface_dfb.cpp.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/surface_dfb.cpp	2012-02-25 12:26:42.798505374 +0100
+@@ -16,7 +16,6 @@
+ #include "logging.h"
+ #include <iostream>
+ 
+-#include "utility.h"
+ 
+ namespace stk
+ {

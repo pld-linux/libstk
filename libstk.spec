@@ -8,11 +8,12 @@
 #	4. make-request -r xine-lib
 #
 # Conditional build:
-%bcond_without	static_libs 	# build without static libraries
-%bcond_without	xine		# build without xine support
+%bcond_without	static_libs 	# static library
+%bcond_without	xine		# XINE support
+%bcond_without	apidocs		# API/internal docs in HTML format
 #
-%define		snap	20061117
-%define		rel	44
+%define		snap	20070719
+%define		rel	1
 Summary:	LibSTK - graphical widget set written in C++
 Summary(pl.UTF-8):	LibSTK - zbiór graficznych widgetów napisany w C++
 Name:		libstk
@@ -20,11 +21,14 @@ Version:	0.2.0
 Release:	0.%{snap}.%{rel}
 License:	Libstk Library License (relaxed LGPL)
 Group:		Libraries
+# https://github.com/dvhart/libstk/tarball/master snapshotted after last commit on %{snap}
 #Source0:	http://www.libstk.net/sites/www.libstk.net/files/%{name}-%{snap}.tar.gz
-Source0:	%{name}-%{snap}.tar.bz2
-# Source0-md5:	350c5e47de8a54d19372bcf6ca926540
+Source0:	%{name}-%{snap}.tar.gz
+# Source0-md5:	59ecdb5f78298896a415abe05855b62e
 Patch0:		%{name}-fixes.patch
 Patch1:		%{name}-am.patch
+Patch2:		%{name}-xine.patch
+Patch3:		%{name}-xsl.patch
 URL:		http://www.libstk.net/
 BuildRequires:	DirectFB-devel
 BuildRequires:	SDL-devel >= 1.2.0
@@ -36,7 +40,14 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtool >= 2:1.5
 BuildRequires:	pkgconfig
-%{?with_xine:BuildRequires:	xine-lib-devel}
+%{?with_xine:BuildRequires:	xine-lib-devel >= 2:1.2}
+%if %{with apidocs}
+BuildRequires:	docbook-dtd42-xml
+BuildRequires:	docbook-style-xsl
+BuildRequires:	graphviz
+BuildRequires:	libxml2-progs
+BuildRequires:	libxslt-progs
+%endif
 Requires:	fonts-TTF-bitstream-vera
 %{?with_xine:Provides:	%{name}(xine) = %{version}-%{release}}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -66,7 +77,7 @@ Requires:	boost-devel >= 1.35.0
 Requires:	freetype-devel >= 2.0
 Requires:	libjpeg-devel
 Requires:	libpng-devel
-%{?with_xine:Requires:	xine-lib-devel}
+%{?with_xine:Requires:	xine-lib-devel >= 2:1.2}
 
 %description devel
 Header files for LibSTK library.
@@ -87,9 +98,13 @@ Static LibSTK library.
 Statyczna biblioteka LibSTK.
 
 %prep
-%setup -q -n %{name}-%{snap}
+%setup -q -n dvhart-libstk-6186fff
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
+
+%{__rm} doc/images/doc_images_go_here
 
 %build
 %{__libtoolize}
@@ -108,6 +123,13 @@ CPPFLAGS="-DHAVE_BASENAME"
 
 %{__make}
 
+%if %{with apidocs}
+cd doc
+./process_xml.sh
+mv -f output html
+mv -f images html
+%endif
+
 %install
 rm -rf $RPM_BUILD_ROOT
 
@@ -119,7 +141,10 @@ for FONT in Vera*.ttf; do
 	%{__rm} "$FONT"
 	ln -s %{_datadir}/fonts/TTF/"$FONT" "$FONT"
 done
-rm copyright
+%{__rm} copyright
+
+# just tests, don't package them
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/{hello_world,hydra,test_app,test_area,timer_test,xine_test}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -136,10 +161,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/*
+%doc doc/{dvhart_carter_architecture.txt,irc_*.txt,uml.jpg,widget_tree.txt} %{?with_apidocs:doc/html}
 %attr(755,root,root) %{_libdir}/libstk.so
 %{_libdir}/libstk.la
-%{_includedir}/libstk-*
+%{_includedir}/libstk-0.2.0
 %{_pkgconfigdir}/libstk.pc
 
 %if %{with static_libs}

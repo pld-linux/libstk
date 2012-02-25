@@ -1,0 +1,64 @@
+--- dvhart-libstk-6186fff/libstk/xine_panel.cpp.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/xine_panel.cpp	2012-02-25 17:35:13.409125178 +0100
+@@ -51,8 +51,8 @@
+ 
+         xp->xine_event_queue_ = xine_event_new_queue(xp->xine_stream_);
+         xine_event_create_listener_thread(xp->xine_event_queue_, &event_listener_wrapper, (void*)xp.get());
+-        xine_gui_send_vo_data(xp->xine_stream_, XINE_GUI_SEND_DRAWABLE_CHANGED, (void*)xp.get());
+-        xine_gui_send_vo_data(xp->xine_stream_, XINE_GUI_SEND_VIDEOWIN_VISIBLE, (void*)1);
++        xine_port_send_gui_data(xp->xine_vo_port_, XINE_GUI_SEND_DRAWABLE_CHANGED, (void*)xp.get());
++        xine_port_send_gui_data(xp->xine_vo_port_, XINE_GUI_SEND_VIDEOWIN_VISIBLE, (void*)1);
+ 
+         // fixme: what's the best way to do this - we didn't want to use public signals for library stuff
+         xp->on_resize.connect(boost::function<bool()>((boost::bind(&xine_panel::drawable_changed, xp.get()), true)));
+@@ -230,10 +230,9 @@
+             surface->fill_rect(vid_rect.intersection(clip_rect));
+         }
+ 
+-        // FIXME: these are deprecated, use: xine_port_send_gui_data(...)
+-        xine_gui_send_vo_data(xine_stream_, XINE_GUI_SEND_DRAWABLE_CHANGED, (void*)this);
+-        xine_gui_send_vo_data(xine_stream_, XINE_GUI_SEND_VIDEOWIN_VISIBLE, (void*)1);
+-        xine_gui_send_vo_data(xine_stream_, XINE_GUI_SEND_EXPOSE_EVENT, NULL);
++        xine_port_send_gui_data(xine_vo_port_, XINE_GUI_SEND_DRAWABLE_CHANGED, (void*)this);
++        xine_port_send_gui_data(xine_vo_port_, XINE_GUI_SEND_VIDEOWIN_VISIBLE, (void*)1);
++        xine_port_send_gui_data(xine_vo_port_, XINE_GUI_SEND_EXPOSE_EVENT, NULL);
+     }
+ 
+     void xine_panel::event_listener_wrapper(void *user_data, const xine_event_t *xine_event) 
+@@ -263,8 +262,8 @@
+ 
+     void xine_panel::drawable_changed()
+     {
+-        xine_gui_send_vo_data(xine_stream_, XINE_GUI_SEND_DRAWABLE_CHANGED, (void*)this);
+-        xine_gui_send_vo_data(xine_stream_, XINE_GUI_SEND_VIDEOWIN_VISIBLE, (void*)1);
++        xine_port_send_gui_data(xine_vo_port_, XINE_GUI_SEND_DRAWABLE_CHANGED, (void*)this);
++        xine_port_send_gui_data(xine_vo_port_, XINE_GUI_SEND_VIDEOWIN_VISIBLE, (void*)1);
+     }
+ 
+     void xine_panel::open(const std::string& stream_mrl)
+@@ -276,10 +275,9 @@
+         }
+         redraw(rect());
+ 
+-        // FIXME: these are deprecated, use: xine_port_send_gui_data(...)
+-        xine_gui_send_vo_data(xine_stream_, XINE_GUI_SEND_DRAWABLE_CHANGED, (void*)this);
+-        xine_gui_send_vo_data(xine_stream_, XINE_GUI_SEND_VIDEOWIN_VISIBLE, (void*)1);
+-        xine_gui_send_vo_data(xine_stream_, XINE_GUI_SEND_EXPOSE_EVENT, NULL);
++        xine_port_send_gui_data(xine_vo_port_, XINE_GUI_SEND_DRAWABLE_CHANGED, (void*)this);
++        xine_port_send_gui_data(xine_vo_port_, XINE_GUI_SEND_VIDEOWIN_VISIBLE, (void*)1);
++        xine_port_send_gui_data(xine_vo_port_, XINE_GUI_SEND_EXPOSE_EVENT, NULL);
+     }
+ 
+     void xine_panel::play(int position, int millis)
+@@ -386,9 +384,8 @@
+ 
+         INFO("sending gui drawable changed");
+         // FIXME: this is now done on_resize()... is that the best way?, maybe we should just have a minimize function?
+-        // FIXME: these are deprecated, use: xine_port_send_gui_data(...)
+-        //xine_gui_send_vo_data(xine_stream_, XINE_GUI_SEND_DRAWABLE_CHANGED, (void*)this);
+-        //xine_gui_send_vo_data(xine_stream_, XINE_GUI_SEND_VIDEOWIN_VISIBLE, (void*)1);
++        //xine_port_send_gui_data(xine_vo_port_, XINE_GUI_SEND_DRAWABLE_CHANGED, (void*)this);
++        //xine_port_send_gui_data(xine_vo_port_, XINE_GUI_SEND_VIDEOWIN_VISIBLE, (void*)1);
+     }
+ 
+     bool xine_panel::visualization(const std::string& name)
