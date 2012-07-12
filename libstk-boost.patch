@@ -1,0 +1,10 @@
+--- dvhart-libstk-6186fff/configure.in.orig	2012-07-12 19:46:49.002209414 +0200
++++ dvhart-libstk-6186fff/configure.in	2012-07-12 20:05:25.845495880 +0200
+@@ -26,6 +26,7 @@
+ 
+ AC_CHECK_LIB(boost_signals, main, , [AC_MSG_ERROR( *** boost_signals library not found - build will fail)])
+ AC_CHECK_LIB(boost_thread, main, , [AC_MSG_ERROR( *** boost_thread library not found - build will fail)])
++AC_CHECK_LIB(boost_system, main, , [AC_MSG_ERROR( *** boost_system library not found - build will fail)])
+ AC_LANG_RESTORE
+ 
+ 
