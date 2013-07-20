@@ -8,3 +8,325 @@
  AC_LANG_RESTORE
  
  
+--- dvhart-libstk-6186fff/libstk/application.cpp.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/application.cpp	2013-07-20 09:38:06.878917844 +0200
+@@ -116,7 +116,7 @@
+                             event_->type() == event::mouse_down ||
+                             event_->type() == event::mouse_up)
+                     {
+-                        mouse_event::ptr me = boost::shared_static_cast<mouse_event>(event_);
++                        mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(event_);
+                         // let current_state_ determine who to send it to
+                         widget::ptr new_hover_ptr = current_state_.lock()->delegate_mouse_event(me);
+                         // temporary shared pointers (avoid so many .lock() calls below)
+@@ -269,7 +269,7 @@
+             case event::key_down:
+                 {
+                     // FIXME :Carter: shouldnt this be a polymorphic cast?
+-                    key_event::ptr ke = boost::shared_static_cast<key_event>(e);
++                    key_event::ptr ke = boost::static_pointer_cast<key_event>(e);
+                     switch (ke->fn_key())
+                     {
+                         case key_escape:
+--- dvhart-libstk-6186fff/libstk/button.cpp.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/button.cpp	2013-07-20 09:39:16.685581581 +0200
+@@ -51,7 +51,7 @@
+             // FIXME: where should default actions be taken care of ?
+             // next and prev are currently in App, so activate (enter) should
+             // probably be with them...
+-            key_event::ptr ke = boost::shared_static_cast<key_event>(e);
++            key_event::ptr ke = boost::static_pointer_cast<key_event>(e);
+             switch ( ke->fn_key() )
+             {
+             case key_enter:
+@@ -68,7 +68,7 @@
+         }
+         case event::key_down:
+         {
+-            key_event::ptr ke = boost::shared_static_cast<key_event>(e);
++            key_event::ptr ke = boost::static_pointer_cast<key_event>(e);
+             switch ( ke->fn_key() )
+             {
+             case key_enter:
+@@ -87,7 +87,7 @@
+         }
+         case event::mouse_down:
+         {
+-            mouse_event::ptr me = boost::shared_static_cast<mouse_event>(e);
++            mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(e);
+             if (!pressed())
+             {
+                 pressed_ = true;
+@@ -99,7 +99,7 @@
+         }
+         case event::mouse_up:
+         {
+-            mouse_event::ptr me = boost::shared_static_cast<mouse_event>(e);
++            mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(e);
+             if (pressed())
+             {
+                 pressed_ = false;
+--- dvhart-libstk-6186fff/libstk/list_template.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/list_template.h	2013-07-20 09:42:52.435572526 +0200
+@@ -86,7 +86,7 @@
+             {
+             case event::mouse_down:
+             {
+-                mouse_event::ptr me = boost::shared_static_cast<mouse_event>(e);
++                mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(e);
+                 int y = 0;
+                 // FIXME: if CNTRL is pressed && multiselect_, don't deselect everything else
+                 select_none();
+@@ -108,7 +108,7 @@
+             }
+             case event::key_down:
+             {
+-                key_event::ptr ke = boost::shared_static_cast<key_event>(e);
++                key_event::ptr ke = boost::static_pointer_cast<key_event>(e);
+                 switch ( ke->fn_key() )
+                 {
+                 case key_downarrow:
+--- dvhart-libstk-6186fff/libstk/numeric_spinner.cpp.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/numeric_spinner.cpp	2013-07-20 09:43:41.645570462 +0200
+@@ -47,7 +47,7 @@
+         {
+             case event::key_down:
+                 {
+-                    key_event::ptr ke = boost::shared_static_cast<key_event>(e);
++                    key_event::ptr ke = boost::static_pointer_cast<key_event>(e);
+                     switch ( ke->fn_key() )
+                     {
+                         case key_enter:
+@@ -80,7 +80,7 @@
+                 }
+             case event::mouse_up:
+                 {
+-                    mouse_event::ptr me = boost::shared_static_cast<mouse_event>(e);
++                    mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(e);
+                     if (region(me->x(), me->y()) == DOWN_ARROW)
+                     {
+                         value_ = value_-increment_;
+--- dvhart-libstk-6186fff/libstk/scroll_bar.cpp.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/scroll_bar.cpp	2013-07-20 09:48:34.288891515 +0200
+@@ -60,7 +60,7 @@
+         }
+         if(e->type()==event::mouse_up)
+         {
+-            mouse_event::ptr me = boost::shared_static_cast<mouse_event>(e);
++            mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(e);
+             regions_ clicked_region=region(me->x(),me->y());
+             if(clicked_region==BELOW_BAR)
+             {
+--- dvhart-libstk-6186fff/libstk/scroll_box.cpp.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/scroll_box.cpp	2013-07-20 09:49:49.498888360 +0200
+@@ -57,7 +57,7 @@
+ 
+     void scroll_box::h_scroll(scroll_model::ptr model)
+     { 
+-        if (child_) boost::shared_dynamic_cast<scrollable>(child_)->h_scroll(model);
++        if (child_) boost::dynamic_pointer_cast<scrollable>(child_)->h_scroll(model);
+         if (h_scroll_bar_) h_scroll_bar_->model(model);
+         scroll_policies(v_policy_, h_policy_);
+         update_model_cons();
+@@ -65,7 +65,7 @@
+ 
+     void scroll_box::v_scroll(scroll_model::ptr model)
+     {
+-        if (child_) boost::shared_dynamic_cast<scrollable>(child_)->v_scroll(model);
++        if (child_) boost::dynamic_pointer_cast<scrollable>(child_)->v_scroll(model);
+         if (v_scroll_bar_) v_scroll_bar_->model(model);
+         scroll_policies(v_policy_, h_policy_);
+         update_model_cons();
+@@ -83,7 +83,7 @@
+         { // we are adding the child widget
+             INFO("Adding child widget to scroll_box");        
+             scrollable::ptr scroll_item;
+-            if (scroll_item = boost::shared_dynamic_cast<scrollable>(item))
++            if (scroll_item = boost::dynamic_pointer_cast<scrollable>(item))
+             { // item is scrollable, add it directly
+                 if (viewport_)
+                 {
+@@ -101,7 +101,7 @@
+                 {
+                     check_scrollable_ = false;
+                     // FIXME: ugly cast, but I don't see a clean way...
+-                    scroll_box::ptr this_ptr = boost::shared_static_cast<scroll_box>(shared_from_this());
++                    scroll_box::ptr this_ptr = boost::static_pointer_cast<scroll_box>(shared_from_this());
+                     INFO("creating viewport");
+                     viewport_ = viewport::create(this_ptr, child_rect_);
+                     INFO("assigning child as viewport");
+@@ -126,7 +126,7 @@
+     scroll_model::ptr scroll_box::h_scroll()
+     {
+         if (child_)
+-            return boost::shared_dynamic_cast<scrollable>(child_)->h_scroll();
++            return boost::dynamic_pointer_cast<scrollable>(child_)->h_scroll();
+         else
+             return scroll_model::ptr();
+     }
+@@ -134,7 +134,7 @@
+     scroll_model::ptr scroll_box::v_scroll()
+     {
+         if (child_)
+-            return boost::shared_dynamic_cast<scrollable>(child_)->v_scroll();
++            return boost::dynamic_pointer_cast<scrollable>(child_)->v_scroll();
+         else
+             return scroll_model::ptr();
+     }
+@@ -173,7 +173,7 @@
+             } 
+             
+             // create the new scroll bars
+-            scroll_box::ptr this_ptr = boost::shared_static_cast<scroll_box>(shared_from_this());
++            scroll_box::ptr this_ptr = boost::static_pointer_cast<scroll_box>(shared_from_this());
+             check_scrollable_ = false;
+             
+             if (vbar && !v_scroll_bar_)
+--- dvhart-libstk-6186fff/libstk/spinner.cpp.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/spinner.cpp	2013-07-20 09:50:36.258886397 +0200
+@@ -44,7 +44,7 @@
+             {
+             case event::key_down:
+             {
+-                key_event::ptr ke = boost::shared_static_cast<key_event>(e);
++                key_event::ptr ke = boost::static_pointer_cast<key_event>(e);
+                 switch ( ke->fn_key() )
+                 {
+                 case key_uparrow:
+@@ -75,7 +75,7 @@
+             }
+             case event::mouse_up:
+             {
+-                mouse_event::ptr me = boost::shared_static_cast<mouse_event>(e);
++                mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(e);
+                 INFO("spinner mouse up at: " << me->x() << "," << me->y());
+                 if (region(me->x(), me->y()) == UP_ARROW)
+                 {
+--- dvhart-libstk-6186fff/libstk/state.cpp.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/state.cpp	2013-07-20 09:53:29.095545810 +0200
+@@ -37,7 +37,7 @@
+     state::state(application::ptr parent) : container(parent->surface()->rect())
+     {
+         INFO("constructor");
+-        parent_ = boost::shared_static_cast<component>(parent);
++        parent_ = boost::static_pointer_cast<component>(parent);
+         focusable_ = false;
+     }
+ 
+--- dvhart-libstk-6186fff/libstk/widget.cpp.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/widget.cpp	2013-07-20 09:55:35.838873825 +0200
+@@ -113,7 +113,7 @@
+             break;
+         case event::key_up:
+         {
+-            key_event::ptr ke = boost::shared_static_cast<key_event>(e);
++            key_event::ptr ke = boost::static_pointer_cast<key_event>(e);
+             if (on_keyup(ke->fn_key())) return;
+             break;
+         }
+@@ -122,8 +122,8 @@
+         case event::mouse_down:
+         {
+             // if this is a mouse event, translate the coordinates back relative to the parent
+-            mouse_event::ptr me = boost::shared_static_cast<mouse_event>(e);
+-            widget::ptr widget_parent = boost::shared_dynamic_cast<widget>(parent_.lock());
++            mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(e);
++            widget::ptr widget_parent = boost::dynamic_pointer_cast<widget>(parent_.lock());
+             if (widget_parent)
+             {
+                 me->x(me->x() + widget_parent->position().x());
+--- dvhart-libstk-6186fff/libstk/edit_box.cpp.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/edit_box.cpp	2013-07-20 09:59:18.875531129 +0200
+@@ -48,7 +48,7 @@
+         {
+         case event::key_down:
+         {
+-            key_event::ptr ke = boost::shared_static_cast<key_event>(e);
++            key_event::ptr ke = boost::static_pointer_cast<key_event>(e);
+             unsigned int sel_min = MIN(selection_end_, selection_start_);
+             unsigned int sel_width = abs(selection_end_-selection_start_);
+             switch ( ke->fn_key() )
+@@ -130,7 +130,7 @@
+         }
+         case event::mouse_down:
+         {
+-            mouse_event::ptr me = boost::shared_static_cast<mouse_event>(e);
++            mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(e);
+             selection_start_ = selection_end_ = region(me->x(), me->y());
+             pressed_ = true;
+             redraw(rect());
+@@ -139,7 +139,7 @@
+         }
+         case event::mouse_motion:
+         {
+-            mouse_event::ptr me = boost::shared_static_cast<mouse_event>(e);            
++            mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(e);            
+             if (pressed_) 
+             {
+                 selection_end_ = region(me->x(), me->y());
+--- dvhart-libstk-6186fff/libstk/text_area.cpp.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/text_area.cpp	2013-07-20 10:00:05.252195852 +0200
+@@ -93,7 +93,7 @@
+         {
+         case event::key_down:
+         {
+-            key_event::ptr ke = boost::shared_static_cast<key_event>(e);
++            key_event::ptr ke = boost::static_pointer_cast<key_event>(e);
+             int sel_min = MIN(selection_end_, selection_start_);
+             int sel_width = abs(selection_end_-selection_start_);
+             int current_pos, new_pos;//for up and down
+@@ -229,7 +229,7 @@
+         }
+         case event::mouse_down:
+         {
+-            mouse_event::ptr me = boost::shared_static_cast<mouse_event>(e);
++            mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(e);
+             selection_start_ = selection_end_ = region(me->x(), me->y());
+             pressed_ = true;
+             redraw(widget::rect());
+@@ -238,7 +238,7 @@
+         }
+         case event::mouse_motion:
+         {
+-            mouse_event::ptr me = boost::shared_static_cast<mouse_event>(e);            
++            mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(e);            
+             if (pressed_) 
+             {
+                 selection_end_ = region(me->x(), me->y());
+--- dvhart-libstk-6186fff/libstk/xine_panel.cpp.orig	2013-07-20 09:44:21.372235461 +0200
++++ dvhart-libstk-6186fff/libstk/xine_panel.cpp	2013-07-20 10:02:07.475524057 +0200
+@@ -100,7 +100,7 @@
+             break;
+         case event::key_up:
+         {
+-            key_event::ptr ke = boost::shared_static_cast<key_event>(e);
++            key_event::ptr ke = boost::static_pointer_cast<key_event>(e);
+             switch ( ke->fn_key() )
+             {
+             case key_enter:
+@@ -112,7 +112,7 @@
+         }
+         case event::key_down:
+         {
+-            key_event::ptr ke = boost::shared_static_cast<key_event>(e);
++            key_event::ptr ke = boost::static_pointer_cast<key_event>(e);
+             switch (ke->fn_key())
+             {
+             // FIXME: use a method to send these events to the xine engine
+@@ -185,14 +185,14 @@
+         }
+         case event::mouse_down:
+         {
+-            mouse_event::ptr me = boost::shared_static_cast<mouse_event>(e);
++            mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(e);
+             INFO("mouse button " << me->button() << " pressed");
+             return;
+             break; // mouse_down
+         }
+         case event::mouse_up:
+         {
+-            mouse_event::ptr me = boost::shared_static_cast<mouse_event>(e);
++            mouse_event::ptr me = boost::static_pointer_cast<mouse_event>(e);
+             INFO("mouse button " << me->button() << " released");
+             return;
+             break; // mouse_up
