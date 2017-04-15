@@ -330,3 +330,14 @@
              INFO("mouse button " << me->button() << " released");
              return;
              break; // mouse_up
+--- dvhart-libstk-6186fff/libstk/surface_dfb.cpp.orig	2017-04-14 23:11:37.470670093 +0200
++++ dvhart-libstk-6186fff/libstk/surface_dfb.cpp	2017-04-15 07:24:28.175274064 +0200
+@@ -25,7 +25,7 @@
+         DFBSurfaceDescription dsc;
+         memset(&dsc, 0, sizeof(dsc));
+ 
+-        bool rect_specified = rect;
++        bool rect_specified = bool(rect);
+         
+         dsc.flags = DSDESC_CAPS;
+         backend_handle = backend_dfb::get();
