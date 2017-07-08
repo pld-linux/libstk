@@ -13,7 +13,7 @@
 %bcond_without	apidocs		# API/internal docs in HTML format
 #
 %define		snap	20070719
-%define		rel	18
+%define		rel	19
 Summary:	LibSTK - graphical widget set written in C++
 Summary(pl.UTF-8):	LibSTK - zbiór graficznych widgetów napisany w C++
 Name:		libstk
