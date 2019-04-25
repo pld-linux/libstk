@@ -13,7 +13,7 @@
 %bcond_without	apidocs		# API/internal docs in HTML format
 #
 %define		snap	20070719
-%define		rel	20
+%define		rel	21
 Summary:	LibSTK - graphical widget set written in C++
 Summary(pl.UTF-8):	LibSTK - zbiór graficznych widgetów napisany w C++
 Name:		libstk
@@ -30,12 +30,14 @@ Patch1:		%{name}-am.patch
 Patch2:		%{name}-xine.patch
 Patch3:		%{name}-xsl.patch
 Patch4:		%{name}-boost.patch
+Patch5:		%{name}-boost-signals.patch
 URL:		http://www.libstk.net/
 BuildRequires:	DirectFB-devel
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	autoconf >= 2.54
 BuildRequires:	automake >= 1:1.7
-BuildRequires:	boost-devel >= 1.35.0
+# 1.35 orignally, 1.39 with signals2 patch
+BuildRequires:	boost-devel >= 1.39.0
 BuildRequires:	freetype-devel >= 2.0
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
@@ -105,6 +107,7 @@ Statyczna biblioteka LibSTK.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %{__rm} doc/images/doc_images_go_here
 

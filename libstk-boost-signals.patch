@@ -1,0 +1,495 @@
+--- dvhart-libstk-6186fff/configure.in.orig	2019-04-25 15:46:28.449375003 +0200
++++ dvhart-libstk-6186fff/configure.in	2019-04-25 15:51:13.047833201 +0200
+@@ -15,7 +15,7 @@
+ AC_LANG([C++])
+ AC_CHECK_HEADER(boost/shared_ptr.hpp, , [AC_MSG_ERROR( *** boost/shared_ptr.hpp not found - build will fail)])
+ AC_CHECK_HEADER(boost/weak_ptr.hpp, , [AC_MSG_ERROR( *** boost/weak_ptr.hpp not found - build will fail)])
+-AC_CHECK_HEADER(boost/signal.hpp, , [AC_MSG_ERROR( *** boost/signal.hpp not found - build will fail)])
++AC_CHECK_HEADER(boost/signals2/signal.hpp, , [AC_MSG_ERROR( *** boost/signal.hpp not found - build will fail)])
+ AC_CHECK_HEADER(boost/shared_array.hpp, , [AC_MSG_ERROR( *** boost/shared_array.hpp not found - build will fail)])
+ AC_CHECK_HEADER(boost/operators.hpp, , [AC_MSG_ERROR( ***  boost/operators.hpp not found - build will fail)])
+ AC_CHECK_HEADER(boost/bind.hpp, , [AC_MSG_ERROR( *** boost/bind.hpp not found - build will fail)])
+@@ -24,7 +24,6 @@
+ dnl FIXME make this use AC_CHECK_HEADERS and update the event_system/producers accordingly
+ dnl AC_CHECK_HEADER(boost/thread/mutex.hpp, , [AC_MSG_ERROR( *** boost/thread/mutex.hpp not found - build will fail)])
+ 
+-AC_CHECK_LIB(boost_signals, main, , [AC_MSG_ERROR( *** boost_signals library not found - build will fail)])
+ AC_CHECK_LIB(boost_thread, main, , [AC_MSG_ERROR( *** boost_thread library not found - build will fail)])
+ AC_CHECK_LIB(boost_system, main, , [AC_MSG_ERROR( *** boost_system library not found - build will fail)])
+ AC_LANG_RESTORE
+--- dvhart-libstk-6186fff/libstk.pc.in.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk.pc.in	2019-04-25 15:52:28.044093578 +0200
+@@ -7,6 +7,6 @@
+ Description: The Settop box Toolkit
+ Requires:
+ Version: @VERSION@
+-Libs: -L${libdir} -lstk -lboost_signals -lfreetype
++Libs: -L${libdir} -lstk -lfreetype
+ Cflags: -I${includedir}/libstk-@VERSION@  -I/usr/include/freetype2
+ 
+--- dvhart-libstk-6186fff/test/Makefile.am.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/test/Makefile.am	2019-04-25 15:53:35.997058778 +0200
+@@ -44,11 +44,11 @@
+ test_area_SOURCES         = test_area.cpp 
+ printing_test_SOURCES	  = printing_test.cpp
+ 
+-hello_world_LDADD       = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la
+-test_app_LDADD          = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la
+-hydra_LDADD             = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la
+-xine_test_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la 
++hello_world_LDADD       = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_thread $(top_srcdir)/libstk/libstk.la
++test_app_LDADD          = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_thread $(top_srcdir)/libstk/libstk.la
++hydra_LDADD             = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_thread $(top_srcdir)/libstk/libstk.la
++xine_test_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS) $(LIBJPEB_LIBS) -lboost_thread $(top_srcdir)/libstk/libstk.la 
+ xine_test_LDFLAGS       = `xine-config --libs`
+ timer_test_LDADD        = $(top_srcdir)/libstk/libstk.la
+-test_area_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS)  $(LIBJPEB_LIBS) -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la
+-printing_test_LDADD     = -lboost_signals -lboost_thread $(top_srcdir)/libstk/libstk.la -lijs 
++test_area_LDADD         = $(SDL_LIBS) $(DIRECTFB_LIBS) $(FREETYPE_LIBS) $(LIBPNG_LIBS)  $(LIBJPEB_LIBS) -lboost_thread $(top_srcdir)/libstk/libstk.la
++printing_test_LDADD     = -lboost_thread $(top_srcdir)/libstk/libstk.la -lijs 
+--- dvhart-libstk-6186fff/libstk/button.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/button.h	2019-04-25 15:59:52.028354975 +0200
+@@ -14,7 +14,7 @@
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
+-#include <boost/signal.hpp>
++#include <boost/signals2/signal.hpp>
+ 
+ #include <libstk/widget.h>
+ #include <libstk/container.h>
+@@ -56,8 +56,8 @@
+         /// get the property label (#label_)
+         std::wstring label();
+         // button signals
+-        boost::signal<bool (), combiner::logical_or<bool> > on_press;
+-        boost::signal<bool (), combiner::logical_or<bool> > on_release;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_press;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_release;
+         /********** END BUTTON INTERFACE **********/
+     };
+ 
+--- dvhart-libstk-6186fff/libstk/edit_box.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/edit_box.h	2019-04-25 16:00:26.844833025 +0200
+@@ -14,7 +14,7 @@
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
+-#include <boost/signal.hpp>
++#include <boost/signals2/signal.hpp>
+ 
+ #include <libstk/widget.h>
+ #include <libstk/container.h>
+@@ -71,10 +71,10 @@
+         
+         // signals
+         /// called when the text is changed
+-        boost::signal<bool (std::wstring), combiner::logical_or<bool> > on_change;
++        boost::signals2::signal<bool (std::wstring), combiner::logical_or<bool> > on_change;
+         /// called when the user presses enter in the box
+         /// FIXME: what is a better name for this signal ?
+-        boost::signal<bool (std::wstring), combiner::logical_or<bool> > on_confirm;
++        boost::signals2::signal<bool (std::wstring), combiner::logical_or<bool> > on_confirm;
+ 
+         virtual void draw(surface::ptr surface, const rectangle& clip_rect);
+         virtual void handle_event(event::ptr e);
+--- dvhart-libstk-6186fff/libstk/hotkey.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/hotkey.h	2019-04-25 16:31:31.351398793 +0200
+@@ -13,7 +13,7 @@
+ #ifndef STK_HOTKEY_H
+ #define STK_HOTKEY_H
+ 
+-#include <boost/signal.hpp>
++#include <boost/signals2/signal.hpp>
+ #include <libstk/keycode.h>
+ #include <libstk/logging.h>
+ 
+@@ -29,7 +29,7 @@
+         hotkey(const stk::keycode key = key_unknown) : key_(key)
+         { }
+ 
+-        boost::signal<bool ()> sig;
++        boost::signals2::signal<bool ()> sig;
+ 
+         // FIXME: this should receive a key_event (keycode only defines the fn_keys)
+         bool operator()(stk::keycode key)
+@@ -38,7 +38,7 @@
+             if (!sig.empty() && key == key_)
+             {
+                 INFO("\texecuting slot");
+-                return sig();
++                return *sig();
+             }
+             return false; // not handled
+         }
+--- dvhart-libstk-6186fff/libstk/image_panel.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/image_panel.h	2019-04-25 16:37:58.809299754 +0200
+@@ -14,7 +14,6 @@
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
+-#include <boost/signal.hpp>
+ #include <libstk/rectangle.h>
+ #include <libstk/widget.h>
+ #include <libstk/container.h>
+--- dvhart-libstk-6186fff/libstk/label.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/label.h	2019-04-25 16:38:15.275877213 +0200
+@@ -15,7 +15,6 @@
+ #include <string>
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
+-#include <boost/signal.hpp>
+ #include <boost/optional.hpp>
+ 
+ #include <libstk/widget.h>
+--- dvhart-libstk-6186fff/libstk/ownerdraw_widget.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/ownerdraw_widget.h	2019-04-25 16:38:47.355703422 +0200
+@@ -15,7 +15,6 @@
+ #include <string>
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
+-#include <boost/signal.hpp>
+ #include <boost/optional.hpp>
+ 
+ #include <libstk/widget.h>
+--- dvhart-libstk-6186fff/libstk/progress.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/progress.h	2019-04-25 16:39:01.858958184 +0200
+@@ -14,7 +14,6 @@
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
+-#include <boost/signal.hpp>
+ 
+ #include <libstk/rectangle.h>
+ #include <libstk/widget.h>
+--- dvhart-libstk-6186fff/libstk/scroll_bar.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/scroll_bar.h	2019-04-25 16:39:51.628688559 +0200
+@@ -13,7 +13,7 @@
+ #define STK_SCROLL_BAR_H
+ 
+ #include <boost/smart_ptr.hpp>
+-#include <boost/signal.hpp>
++#include <boost/signals2/signal.hpp>
+ 
+ #include <libstk/scroll_model.h>
+ #include <libstk/widget.h>
+@@ -36,7 +36,7 @@
+         scroll_bar(const rectangle& rect, scroll_model::ptr model);
+ 
+         scroll_model::ptr model_;
+-        boost::signals::connection scroll_con_;
++        boost::signals2::connection scroll_con_;
+ 
+         /// helper function to redraw the whole widget
+         void redraw();
+--- dvhart-libstk-6186fff/libstk/scroll_model.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/scroll_model.h	2019-04-25 16:40:11.978578314 +0200
+@@ -13,7 +13,7 @@
+ #define STK_SCROLL_MODEL_H
+ 
+ #include <boost/smart_ptr.hpp>
+-#include <boost/signal.hpp>
++#include <boost/signals2/signal.hpp>
+ 
+ namespace stk
+ {
+@@ -43,7 +43,7 @@
+         int vis_size() const;
+         void vis_size(int val);
+ 
+-        boost::signal<void () > on_change;
++        boost::signals2::signal<void () > on_change;
+     };
+ 
+ } // namespace stk
+--- dvhart-libstk-6186fff/libstk/stk.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/stk.h	2019-04-25 16:41:03.738297907 +0200
+@@ -18,7 +18,6 @@
+ // boost headers
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
+-#include <boost/signal.hpp>
+ #include <boost/bind.hpp>
+ 
+ // libstk headers
+--- dvhart-libstk-6186fff/libstk/text_area.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/text_area.h	2019-04-25 16:41:49.904714469 +0200
+@@ -14,7 +14,7 @@
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
+-#include <boost/signal.hpp>
++#include <boost/signals2/signal.hpp>
+ #include <libstk/scrollable.h>
+ #include <libstk/scroll_model.h>
+ #include <libstk/widget.h>
+@@ -74,8 +74,8 @@
+     protected:
+         text_area(const std::wstring& text, const rectangle& rect, bool line_wrap, bool editable);
+         void resize();
+-        boost::signals::connection v_scroll_con_;
+-        boost::signals::connection h_scroll_con_;
++        boost::signals2::connection v_scroll_con_;
++        boost::signals2::connection h_scroll_con_;
+         
+     public:
+         static text_area::ptr create(container::ptr parent, const std::wstring& text,
+@@ -133,7 +133,7 @@
+ 
+         // signals
+         /// called when the text is changed
+-        boost::signal<bool (std::wstring), combiner::logical_or<bool> > on_change;
++        boost::signals2::signal<bool (std::wstring), combiner::logical_or<bool> > on_change;
+         /*** DRAWABLE INTERFACE ****/
+         virtual void draw(surface::ptr surface, const rectangle& clip_rect);
+         /**** END DRAWABLE INTERFACE ****/
+--- dvhart-libstk-6186fff/libstk/timer.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/timer.h	2019-04-25 16:42:39.644445006 +0200
+@@ -15,7 +15,7 @@
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
+-#include <boost/signal.hpp>
++#include <boost/signals2/signal.hpp>
+ #include <libstk/combiners.h>
+ #include <libstk/time_value.h>
+ 
+@@ -65,7 +65,7 @@
+         {
+             repeat_ = repeat;
+         }
+-        boost::signal<bool (), combiner::logical_or<bool> > on_timer;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_timer;
+     };
+ }
+ 
+--- dvhart-libstk-6186fff/libstk/widget.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/widget.h	2019-04-25 16:43:05.637637522 +0200
+@@ -15,7 +15,7 @@
+ #include <string>
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
+-#include <boost/signal.hpp>
++#include <boost/signals2/signal.hpp>
+ #include <boost/enable_shared_from_this.hpp>
+ 
+ #include <libstk/component.h>
+@@ -113,13 +113,13 @@
+         /// Return the hover property of the widget
+         virtual bool hover() const { return hover_; }
+ 
+-        boost::signal<bool (), combiner::logical_or<bool> > on_resize;
+-        boost::signal<bool (), combiner::logical_or<bool> > on_focus;
+-        boost::signal<bool (), combiner::logical_or<bool> > on_unfocus;
+-        boost::signal<bool (), combiner::logical_or<bool> > on_mouse_enter;
+-        boost::signal<bool (), combiner::logical_or<bool> > on_mouse_leave;
+-        boost::signal<bool (stk::keycode), combiner::logical_or<bool> > on_keydown;
+-        boost::signal<bool (stk::keycode), combiner::logical_or<bool> > on_keyup;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_resize;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_focus;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_unfocus;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_mouse_enter;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_mouse_leave;
++        boost::signals2::signal<bool (stk::keycode), combiner::logical_or<bool> > on_keydown;
++        boost::signals2::signal<bool (stk::keycode), combiner::logical_or<bool> > on_keyup;
+         /********** END WIDGET INTERFACE **********/
+ 
+         /********** COMPONENT INTERFACE **********/
+--- dvhart-libstk-6186fff/libstk/xine_panel.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/xine_panel.h	2019-04-25 16:43:49.630732524 +0200
+@@ -14,7 +14,7 @@
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
+-#include <boost/signal.hpp>
++#include <boost/signals2/signal.hpp>
+ 
+ #include <libstk/widget.h>
+ #include <libstk/container.h>
+@@ -108,7 +108,7 @@
+         ///\param ms_len the length of the stream in milliseconds
+         void position(int* stream_pos, int* ms_pos, int* ms_len);
+         // xine_panel signals
+-        boost::signal<bool (), combiner::logical_or<bool> > on_playback_finished;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_playback_finished;
+         /********** END XINE PANEL INTERFACE **********/
+     };
+ 
+--- dvhart-libstk-6186fff/libstk/application.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/application.h	2019-04-25 17:50:47.172300968 +0200
+@@ -15,6 +15,7 @@
+ #include <list>
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
++#include <boost/signals2/signal.hpp>
+ #include <boost/thread/mutex.hpp>
+ 
+ #include <libstk/component.h>
+@@ -101,11 +102,11 @@
+         virtual void redraw(const rectangle& rect, drawable* source=NULL, bool transform=false);
+ 
+         // Triggered before STK's drawing code ran  \FIXME what does the return value mean?
+-        boost::signal<bool (stk::rectangle), combiner::logical_or<bool> > on_predraw;
++        boost::signals2::signal<bool (stk::rectangle), combiner::logical_or<bool> > on_predraw;
+         // Triggered after STK's drawing code ran    \FIXME what does the return value mean?
+-        boost::signal<bool (stk::rectangle), combiner::logical_or<bool> > on_postdraw;
++        boost::signals2::signal<bool (stk::rectangle), combiner::logical_or<bool> > on_postdraw;
+         // Triggered before STK receives an event, return true if event was handled in the signal handler
+-        boost::signal<bool (event::ptr), combiner::logical_or<bool> > on_event;
++        boost::signals2::signal<bool (event::ptr), combiner::logical_or<bool> > on_event;
+ 
+         // Mutex to lock the mainloop in a multi threaded environment
+         boost::mutex mainloop_mutex;
+--- dvhart-libstk-6186fff/libstk/state.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/state.h	2019-04-25 17:51:40.238680149 +0200
+@@ -14,6 +14,7 @@
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
++#include <boost/signals2/signal.hpp>
+ #include <libstk/application.h>
+ #include <libstk/container.h>
+ #include <libstk/image.h>
+@@ -70,8 +71,8 @@
+         // FIXME: these two should probably be moved up to container
+         virtual widget::ptr focus_first();
+         virtual widget::ptr focus_last();
+-        boost::signal<bool (), combiner::logical_or<bool> > on_enter;
+-        boost::signal<bool (), combiner::logical_or<bool> > on_leave;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_enter;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_leave;
+         /********** END STATE INTERFACE **********/
+     };
+ }
+--- dvhart-libstk-6186fff/libstk/list_template.h.orig	2019-04-25 16:47:03.206350502 +0200
++++ dvhart-libstk-6186fff/libstk/list_template.h	2019-04-25 18:01:35.298789765 +0200
+@@ -17,6 +17,7 @@
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
+ #include <boost/bind.hpp>
++#include <boost/signals2/signal.hpp>
+ 
+ #include <libstk/container.h>
+ #include "libstk/event.h"
+@@ -58,7 +59,7 @@
+         std::vector<Titem> items_; // FIXME: use the children vector? (if not we have less casting to do)
+ 
+         // scrolling members
+-        boost::signals::connection v_scroll_con_;
++        boost::signals2::connection v_scroll_con_;
+ 
+     public:
+         static typename list_template<Titem>::ptr create(container::ptr parent, const rectangle& rect,
+@@ -379,8 +380,8 @@
+         virtual void multiselect(bool val) { multiselect_ = val; }
+ 
+         // list signals FIXME: what should the signature of the slots be ?
+-        boost::signal<bool (), combiner::logical_or<bool> > on_update_selection;
+-        boost::signal<bool (), combiner::logical_or<bool> > on_update_current;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_update_selection;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_update_current;
+         /********** END LIST INTERFACE **********/
+     };
+ }
+--- dvhart-libstk-6186fff/libstk/numeric_spinner.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/numeric_spinner.h	2019-04-25 18:05:05.750982981 +0200
+@@ -15,6 +15,7 @@
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
++#include <boost/signals2/signal.hpp>
+ #include <libstk/rectangle.h>
+ #include <libstk/container.h>
+ 
+@@ -83,7 +84,7 @@
+             void wrap(bool val) { wrap_ = val; redraw(rect()); }
+ 
+             // numeric_spinner signals
+-            boost::signal<bool (), combiner::logical_or<bool> > on_change;
++            boost::signals2::signal<bool (), combiner::logical_or<bool> > on_change;
+             /********** END NUMERIC SPINNER INTERFACE **********/
+     };
+ }
+--- dvhart-libstk-6186fff/libstk/viewport.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/viewport.h	2019-04-25 18:09:59.476058403 +0200
+@@ -15,6 +15,7 @@
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
++#include <boost/signals2/signal.hpp>
+ #include <libstk/container.h>
+ #include <libstk/scroll_model.h>
+ #include <libstk/scrollable.h>
+@@ -35,8 +36,8 @@
+     protected:
+         viewport(const rectangle& rect);
+ 
+-        boost::signals::connection h_scroll_con;
+-        boost::signals::connection v_scroll_con;
++        boost::signals2::connection h_scroll_con;
++        boost::signals2::connection v_scroll_con;
+ 
+         /// helper function to redraw the whole widget
+         void redraw();
+--- dvhart-libstk-6186fff/libstk/scroll_box.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/scroll_box.h	2019-04-25 18:10:35.345864079 +0200
+@@ -14,6 +14,7 @@
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
++#include <boost/signals2/signal.hpp>
+ #include <libstk/container.h>
+ #include <libstk/scroll_bar.h>
+ #include <libstk/scrollable.h>
+@@ -45,8 +46,8 @@
+         viewport::ptr viewport_;
+         widget::ptr child_;
+ 
+-        boost::signals::connection v_scroll_con_;
+-        boost::signals::connection h_scroll_con_;
++        boost::signals2::connection v_scroll_con_;
++        boost::signals2::connection h_scroll_con_;
+ 
+     public:
+         static scroll_box::ptr create(container::ptr parent, const rectangle& rect, 
+--- dvhart-libstk-6186fff/libstk/spinner.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/spinner.h	2019-04-25 18:11:38.322189574 +0200
+@@ -15,6 +15,7 @@
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
++#include <boost/signals2/signal.hpp>
+ #include <libstk/rectangle.h>
+ #include <libstk/container.h>
+ #include <libstk/list.h>
+@@ -64,7 +65,7 @@
+         /********** SPINNER INTERFACE **********/
+         // spinner signals
+         ///\todo perhaps this belongs in list ?
+-        boost::signal<bool (), combiner::logical_or<bool> > on_change;
++        boost::signals2::signal<bool (), combiner::logical_or<bool> > on_change;
+         bool wrap() const { return wrap_; }
+         void wrap(bool val) { wrap_ = val; redraw(widget::rect()); }
+ 
+--- dvhart-libstk-6186fff/libstk/spreadsheet.h.orig	2007-07-19 10:46:21.000000000 +0200
++++ dvhart-libstk-6186fff/libstk/spreadsheet.h	2019-04-25 18:14:14.604676252 +0200
+@@ -17,6 +17,7 @@
+ #include <boost/shared_ptr.hpp>
+ #include <boost/weak_ptr.hpp>
+ #include <boost/optional.hpp>
++#include <boost/signals2/signal.hpp>
+ #include <libstk/widget.h>
+ #include <libstk/container.h>
+ #include <libstk/scroll_model.h>
+@@ -80,9 +81,9 @@
+         spreadsheet(const rectangle& rect);
+ 
+         scroll_model::ptr v_scroll_;
+-        boost::signals::connection v_scroll_con;
++        boost::signals2::connection v_scroll_con;
+         scroll_model::ptr h_scroll_;
+-        boost::signals::connection h_scroll_con;
++        boost::signals2::connection h_scroll_con;
+         
+         stk::spreadsheet_cell::ptr focused_cell_;
+ 
